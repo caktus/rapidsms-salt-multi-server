@@ -1,0 +1,8 @@
+ubuntu_precise:
+  provider: aws-east-private-ips
+  image: ami-1b135e72
+  size: Micro Instance
+  minion:
+    mine_functions:
+      network.ip_addrs:
+        - eth0

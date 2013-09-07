@@ -1,0 +1,19 @@
+ubuntu_precise:
+# staging
+  - db-master:
+      grains:
+        environment: staging
+        role: database
+  - web1:
+      grains:
+        environment: staging
+        role: web
+# qa
+  - db-master:
+      grains:
+        environment: qa
+        role: database
+  - web1:
+      grains:
+        environment: qa
+        role: web
