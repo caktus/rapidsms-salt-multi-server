@@ -22,7 +22,7 @@ Getting Started
 To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
-    mkvirtualenv --distribute rapidsms-project
+    mkvirtualenv --distribute rapidsms-multiserver
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
 
 Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to use it::
@@ -34,11 +34,11 @@ Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to use
 Exit the virtualenv and reactivate it to activate the settings just changed::
 
     deactivate
-    workon project
+    workon rapidsms-multiserver
 
 Create the Postgres database and run the initial syncdb/migrate::
 
-    createdb -E UTF-8 rapidsms-project
+    createdb -E UTF-8 project
     python manage.py syncdb
     python manage.py migrate
 
