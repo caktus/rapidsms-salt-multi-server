@@ -1,3 +1,4 @@
+import os
 from project.settings.base import *
 
 DEBUG = False
@@ -30,3 +31,6 @@ ALLOWED_HOSTS = ()
 
 # Uncomment if using celery worker configuration
 # BROKER_URL = 'amqp://project:%s@127.0.0.1:5672/project_staging' % os.environ['BROKER_PASSWORD']
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = os.environ['SECRET_KEY']
