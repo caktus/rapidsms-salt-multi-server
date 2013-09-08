@@ -2,6 +2,51 @@ Vagrant Testing
 ========================
 
 
+Master setup with Vagrant
+-------------------------
+
+#. Download and install `Vagrant`_.
+
+#. Bring the master online::
+
+    vagrant up salt
+
+#. Locate your Vagrant SSH keys::
+
+    $ locate keys/vagrant
+    /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant
+    /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant.pub
+
+#. Install salt-master and salt-minion::
+
+    fab vagrant -u vagrant -i /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant provision
+    fab vagrant -u vagrant -i /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant highstate
+
+#. Now you can run commands normally::
+
+    fab vagrant highstate
+
+
+Minon setup
+-----------
+
+#. Spin up our web instance::
+
+    vagrant up web_staging
+
+#. Bootstrap the instance with salt-minion::
+
+    fab -H 10.10.10.3 -u vagrant -i /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant bootstrap_minion:web-staging-vagrant,10.10.10.2
+
+#. Accept the minon's keys on the master::
+
+    fab vagrant accept_keys:web-staging-vagrant
+
+#. Call highstate to provision the instance::
+
+    fab vagrant highstate
+
+
 Starting the VM
 ------------------------
 
