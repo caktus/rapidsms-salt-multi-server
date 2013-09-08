@@ -38,6 +38,7 @@ project_repo:
     - runas: {{ pillar['project_name'] }}
     - require:
       - file: root_dir
+      - pkg: git-core
 
 collectstatic:
   cmd.run:

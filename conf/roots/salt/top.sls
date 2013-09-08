@@ -10,7 +10,7 @@ base:
   'web*':
     - project.user
     - project.app
-    # - project.web
+    - project.web
     # - project.db
     # Uncomment to enable celery worker configuration
     # - project.worker
