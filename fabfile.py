@@ -121,12 +121,37 @@ def sync():
 
 
 @task
-def highstate():
+def highstate(target='*'):
     """Run highstate command on master"""
     require('environment')
     # Update to highstate
     with settings(warn_only=True):
-        sudo("salt '*' state.highstate")
+        sudo("salt '{}' state.highstate".format(target))
+
+
+@task
+def bootstrap_minion(name, master):
+    """Setup with salt-minion and point to proper master"""
+    # point salt hostname to master address
+    sudo('echo "{} salt" >> /etc/hosts'.format(master))
+    # set hostname
+    sudo('echo "{}" >> /etc/hostname'.format(name))
+    sudo('hostname {}'.format(name))
+    # install salt-minion
+    sudo('apt-get update -q -y')
+    sudo('apt-get install python-software-properties -q -y')
+    sudo('add-apt-repository ppa:saltstack/salt -y')
+    sudo('apt-get update -q -y')
+    sudo('apt-get install salt-minion -q -y')
+
+
+@task
+def accept_keys(name):
+    """Accept specific key on master"""
+    require('environment')
+    sudo('salt-key --accept={} -y'.format(name))
+    sudo('salt-key -L')
+    sudo("salt '*' test.ping")
 
 
 @task

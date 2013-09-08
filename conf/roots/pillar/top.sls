@@ -1,6 +1,7 @@
 base:
   "*":
     - devs
+    - project
   "*staging*":
     - staging.env
     - staging.secrets

@@ -1,5 +1,6 @@
 {% import 'project/_vars.sls' as vars with context %}
 {% set venv_dir = vars.path_from_root('env') %}
+{% set requirements = vars.build_path(vars.source_dir, 'requirements/production.txt') %}
 
 include:
   - memcached
@@ -7,6 +8,7 @@ include:
   - version-control
   - python
   - supervisor
+  - project.venv
 
 root_dir:
   file.directory:
@@ -28,42 +30,25 @@ log_dir:
     - require:
       - file: root_dir
 
-venv:
-  virtualenv.managed:
-    - name: {{ venv_dir }}
-    - no_site_packages: True
-    - distribute: True
+project_repo:
+  git.latest:
+    - name: https://github.com/caktus/rapidsms-salt-multi-server.git
+    - rev: master
+    - target: {{ vars.source_dir }}
+    - runas: {{ pillar['project_name'] }}
     - require:
-      - pip: virtualenv
       - file: root_dir
 
-venv_dir:
-  file.directory:
-    - name: {{ venv_dir }}
-    - user: {{ pillar['project_name'] }}
-    - group: {{ pillar['project_name'] }}
-    - recurse:
-      - user
-      - group
+collectstatic:
+  cmd.run:
+    - name: {{ venv_dir }}/bin/django-admin.py collectstatic --noinput --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}
     - require:
+      - git: project_repo
       - virtualenv: venv
-
-activate:
-  file.append:
-    - name: {{ vars.build_path(venv_dir, "bin/activate") }}
-    - text: source {{ vars.build_path(venv_dir, "bin/secrets") }}
-    - require:
-      - virtualenv: venv
-
-secrets:
-  file.managed:
-    - name: {{ vars.build_path(venv_dir, "bin/secrets") }}
-    - source: salt://project/env_secrets.jinja2
-    - user: {{ pillar['project_name'] }}
-    - group: {{ pillar['project_name'] }}
-    - template: jinja
-    - require:
-      - file: activate
+    - env:
+    {% for key, value in pillar['secrets'].iteritems() %}
+      - {{ key }}="{{ value }}"
+    {% endfor %}
 
 group_conf:
   file.managed:

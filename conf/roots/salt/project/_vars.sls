@@ -11,3 +11,4 @@
 
 {% set log_dir = path_from_root('log') %}
 {% set server_socket = build_path(root_dir, project + '.sock') %}
+{% set source_dir = path_from_root('source') %}
