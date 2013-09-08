@@ -4,7 +4,19 @@ from project.settings.base import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-DATABASES['default']['NAME'] = 'project_staging'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'project_staging',
+        'USER': 'project',
+        'PASSWORD': os.environ['db_password'],
+        'HOST': os.environ['db_host'],
+        'PORT': '',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
+    }
+}
 
 PUBLIC_ROOT = '/var/www/project-staging/public/'
 
