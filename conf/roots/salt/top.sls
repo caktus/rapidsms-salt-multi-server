@@ -7,7 +7,10 @@ base:
     - locale.utf8
     - fail2ban
     - version-control
+  "*vagrant":
+    - vagrant.user
   'web*':
+    - sshd
     - project.user
     - project.app
     - project.web
