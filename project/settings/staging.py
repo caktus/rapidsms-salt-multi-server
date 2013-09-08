@@ -27,7 +27,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = True
 
-ALLOWED_HOSTS = ()
+ALLOWED_HOSTS = ('*')
 
 # Uncomment if using celery worker configuration
 # BROKER_URL = 'amqp://project:%s@127.0.0.1:5672/project_staging' % os.environ['BROKER_PASSWORD']
