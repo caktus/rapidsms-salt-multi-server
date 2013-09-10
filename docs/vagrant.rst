@@ -46,6 +46,12 @@ Minon setup
 
     fab vagrant highstate
 
+#. Bring up the database instance::
+
+    vagrant up db_staging
+    fab -H 10.10.10.4 -u vagrant -i /opt/vagrant/embedded/gems/gems/vagrant-1.2.7/keys/vagrant bootstrap_minion:db-staging-vagrant,10.10.10.2
+    fab vagrant accept_keys:db-staging-vagrant
+
 
 Starting the VM
 ------------------------

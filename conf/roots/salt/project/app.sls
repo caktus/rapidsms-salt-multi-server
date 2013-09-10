@@ -42,14 +42,17 @@ project_repo:
 
 collectstatic:
   cmd.run:
-    - name: {{ venv_dir }}/bin/django-admin.py collectstatic --noinput --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}
+    - name: . {{ venv_dir }}/bin/secrets && {{ venv_dir }}/bin/django-admin.py collectstatic --noinput --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}
     - require:
       - git: project_repo
       - virtualenv: venv
-    - env:
-    {% for key, value in pillar['secrets'].iteritems() %}
-      - {{ key }}="{{ value }}"
-    {% endfor %}
+
+syncdb:
+  cmd.run:
+    - name: . {{ venv_dir }}/bin/secrets && {{ venv_dir }}/bin/django-admin.py syncdb --noinput --settings={{ pillar['project_name'] }}.settings.{{ pillar['environment'] }}
+    - require:
+      - git: project_repo
+      - virtualenv: venv
 
 group_conf:
   file.managed:

@@ -14,6 +14,9 @@ base:
     - project.user
     - project.app
     - project.web
-    # - project.db
+    # - project.pgbouncer
     # Uncomment to enable celery worker configuration
     # - project.worker
+  'db*':
+    - sshd
+    - project.db

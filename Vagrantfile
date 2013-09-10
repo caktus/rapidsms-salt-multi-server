@@ -22,7 +22,6 @@ Vagrant.configure("2") do |config|
     web_staging.vm.network :private_network, ip: "10.10.10.3"
     web_staging.vm.network :forwarded_port, guest: 80, host: 8090
     web_staging.vm.network :forwarded_port, guest: 443, host: 8089
-    web_staging.vm.network :forwarded_port, guest: 22, host: 2221, auto_correct: true
     web_staging.vm.provider "virtualbox" do |v|
       v.name = "web-staging-vagrant"
       v.customize ["modifyvm", :id, "--memory", "1024"]
@@ -30,13 +29,10 @@ Vagrant.configure("2") do |config|
   end
 
   #### database ####
-  config.vm.define :database_staging do |database_staging|
-    database_staging.vm.network :private_network, ip: "10.10.10.4"
-
-    database_staging.vm.network :forwarded_port, guest: 22, host: 2222, auto_correct: true
-
-    database_staging.vm.provider "virtualbox" do |v|
-      v.name = "web-staging"
+  config.vm.define :db_staging do |db_staging|
+    db_staging.vm.network :private_network, ip: "10.10.10.4"
+    db_staging.vm.provider "virtualbox" do |v|
+      v.name = "db-staging-vagrant"
       v.customize ["modifyvm", :id, "--memory", "1024"]
     end
   end
